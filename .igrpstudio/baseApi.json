@@ -1,0 +1,13 @@
+{
+  "type": "springboot",
+  "name": "License_Config",
+  "group": "cv.igrp",
+  "artifact": "license-configuration-service",
+  "packageName": "license",
+  "database": "Postgresql",
+  "projectStructureStyle": "domain",
+  "enableObservability": false,
+  "enableEntityRevision": true,
+  "version": "0.1.0-beta.1",
+  "enableGraalVm": false
+}
