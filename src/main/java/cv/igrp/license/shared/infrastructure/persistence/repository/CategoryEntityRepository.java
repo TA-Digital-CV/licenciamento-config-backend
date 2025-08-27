@@ -1,0 +1,18 @@
+package cv.igrp.license.shared.infrastructure.persistence.repository;
+
+import cv.igrp.license.shared.infrastructure.persistence.entity.CategoryEntity;
+import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import java.util.Optional;
+import java.util.UUID;
+import org.springframework.data.repository.history.RevisionRepository;
+
+@Repository
+public interface CategoryEntityRepository extends
+    JpaRepository<CategoryEntity, UUID>,
+    JpaSpecificationExecutor<CategoryEntity>,
+    RevisionRepository<CategoryEntity, UUID, Integer>
+{
+
+}
