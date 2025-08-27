@@ -6,7 +6,7 @@
   "basePath": "api/v1/sectors",
   "actions": [
     {
-      "actionName": "getListSectores",
+      "actionName": "getListSectors",
       "method": "GET",
       "responses": {
         "200": {
@@ -215,5 +215,5 @@
       ]
     }
   ],
-  "id": "6t70cqkq49-getSectores-getSectores"
+  "id": "6t70cqkq49-getSectores-getSectores-getListSectores"
 }
