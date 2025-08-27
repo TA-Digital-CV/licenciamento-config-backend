@@ -1,5 +1,7 @@
 package cv.igrp.license.configuration.domain.filter;
 
+import cv.igrp.license.configuration.domain.valueobject.CategoryId;
+import cv.igrp.license.configuration.domain.valueobject.SectorId;
 import cv.igrp.license.shared.domain.valueobject.Identificador;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,8 +10,8 @@ import lombok.Getter;
 @Builder
 public class CategoryFilter {
 
-    private Identificador sectorId;
-    private Identificador parentId;
+    private SectorId sectorId;
+    private CategoryId parentId;
     private Integer level;
     private String name;
     private String code;

@@ -24,4 +24,6 @@ public interface CategoryRepository {
 
     boolean existsByCode(String code);
 
+  boolean existsById(CategoryId id);
+
 }

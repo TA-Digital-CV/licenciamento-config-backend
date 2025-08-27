@@ -69,12 +69,12 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 
             if (filter.getSectorId() != null) {
                 predicates = cb.and(predicates,
-                        cb.equal(root.get("sectorId").get("id"), filter.getSectorId().getValor()));
+                        cb.equal(root.get("sectorId").get("id"), filter.getSectorId().getIdentificador().getValor()));
             }
 
             if (filter.getParentId() != null) {
                 predicates = cb.and(predicates,
-                        cb.equal(root.get("parentId").get("id"), filter.getParentId().getValor()));
+                        cb.equal(root.get("parentId").get("id"), filter.getParentId().getIdentificador().getValor()));
             }
 
             if (filter.getLevel() != null) {
@@ -105,4 +105,9 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     public boolean existsByCode(String code) {
         return categoryEntityRepository.existsByCode(code);
     }
+
+  @Override
+  public boolean existsById(CategoryId id) {
+    return categoryEntityRepository.existsById(id.getIdentificador().getValor());
+  }
 }

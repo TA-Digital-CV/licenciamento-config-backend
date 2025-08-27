@@ -7,10 +7,10 @@ import lombok.Getter;
 @Builder
 public class SectorFilter {
 
-    private String sectorType;
-    private String name;
-    private String code;
-    private boolean active;
-    private Integer pageNumber;
-    private Integer pageSize;
+  private String sectorType;
+  private String name;
+  private String code;
+  private boolean active;
+  private Integer pageNumber;
+  private Integer pageSize;
 }

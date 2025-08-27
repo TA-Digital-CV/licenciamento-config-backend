@@ -19,6 +19,8 @@ public interface CategoryEntityRepository extends
 
   boolean existsByCode(String code);
 
+  boolean existsById(UUID id);
+
   Optional<CategoryEntity> findByCode(String code);
 
   List<CategoryEntity> findAllByActiveTrue();

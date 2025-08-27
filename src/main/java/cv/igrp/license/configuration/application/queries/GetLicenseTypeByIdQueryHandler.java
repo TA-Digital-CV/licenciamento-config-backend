@@ -1,5 +1,9 @@
 package cv.igrp.license.configuration.application.queries;
 
+import cv.igrp.license.configuration.domain.repository.LicenseTypeRepository;
+import cv.igrp.license.configuration.domain.valueobject.LicenseTypeId;
+import cv.igrp.license.configuration.infrastructure.mappers.LicenseTypeMapper;
+import cv.igrp.license.shared.domain.exceptions.IgrpResponseStatusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cv.igrp.framework.core.domain.QueryHandler;
@@ -15,15 +19,26 @@ public class GetLicenseTypeByIdQueryHandler implements QueryHandler<GetLicenseTy
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GetLicenseTypeByIdQueryHandler.class);
 
+  private final LicenseTypeRepository licenseTypeRepository;
+  private final LicenseTypeMapper licenseTypeMapper;
 
-  public GetLicenseTypeByIdQueryHandler() {
+  public GetLicenseTypeByIdQueryHandler(LicenseTypeRepository licenseTypeRepository, LicenseTypeMapper licenseTypeMapper) {
 
+    this.licenseTypeRepository = licenseTypeRepository;
+    this.licenseTypeMapper = licenseTypeMapper;
   }
 
    @IgrpQueryHandler
   public ResponseEntity<LicenseTypeResponseDTO> handle(GetLicenseTypeByIdQuery query) {
-    // TODO: Implement the query handling logic here
-    return null;
+     var licenseTypeId = LicenseTypeId.from(query.getLicenseTypeId());
+
+     var licenseType = licenseTypeRepository.findById(licenseTypeId)
+         .orElseThrow(() -> IgrpResponseStatusException.notFound(
+             "LicenseType not found for id: " + query.getLicenseTypeId()));
+
+     LicenseTypeResponseDTO dto = licenseTypeMapper.toResponseDTO(licenseType);
+
+     return ResponseEntity.ok(dto);
   }
 
 }

@@ -74,7 +74,7 @@ public class LicenseTypeRepositoryImpl implements LicenseTypeRepository {
 
             if (filter.getCategoryId() != null) {
                 predicates = cb.and(predicates,
-                        cb.equal(root.get("categoryId").get("id"), filter.getCategoryId().getValor()));
+                        cb.equal(root.get("categoryId").get("id"), filter.getCategoryId().getIdentificador().getValor()));
             }
 
             if (filter.isRenewable()) {
