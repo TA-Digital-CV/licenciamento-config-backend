@@ -1,6 +1,7 @@
 package cv.igrp.license.configuration.infrastructure.mappers;
 
 
+import cv.igrp.license.configuration.application.dto.SectorResponseDTO;
 import cv.igrp.license.configuration.domain.models.Sector;
 import cv.igrp.license.configuration.domain.valueobject.SectorId;
 import cv.igrp.license.shared.domain.valueobject.Identificador;
@@ -42,11 +43,11 @@ public class SectorMapper {
         return entity;
     }
 
-   /* public SectorResponseDTO toResponseDTO(Sector sector) {
+    public SectorResponseDTO toResponseDTO(Sector sector) {
         if (sector == null) return null;
 
         SectorResponseDTO dto = new SectorResponseDTO();
-        dto.setId(sector.getId().getStringValor());
+        dto.setId(sector.getId().getIdentificador().getStringValor());
         dto.setName(sector.getName());
         dto.setDescription(sector.getDescription());
         dto.setCode(sector.getCode());
@@ -55,6 +56,6 @@ public class SectorMapper {
         dto.setSortOrder(sector.getSortOrder());
 
         return dto;
-    }*/
+    }
 
 }

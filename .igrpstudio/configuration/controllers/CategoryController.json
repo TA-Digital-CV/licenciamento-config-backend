@@ -1,0 +1,268 @@
+{
+  "type": "controller",
+  "name": "Category",
+  "module": "configuration",
+  "description": "gestao Categorias licenciamento",
+  "basePath": "api/v1/categories",
+  "actions": [
+    {
+      "actionName": "getListCategories",
+      "method": "GET",
+      "responses": {
+        "200": {
+          "name": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "WrapperListCategory",
+                "objectType": "dto",
+                "name": "data",
+                "collectionType": "none",
+                "module": "configuration"
+              }
+            }
+          }
+        }
+      },
+      "requestParams": [
+        {
+          "type": "string",
+          "name": "sectorId",
+          "isRequired": false
+        },
+        {
+          "type": "string",
+          "name": "parentId",
+          "isRequired": false
+        },
+        {
+          "type": "integer",
+          "name": "level",
+          "isRequired": false
+        },
+        {
+          "type": "string",
+          "name": "name",
+          "isRequired": false
+        },
+        {
+          "type": "string",
+          "name": "code",
+          "isRequired": false
+        },
+        {
+          "type": "boolean",
+          "name": "active",
+          "isRequired": false,
+          "value": "true"
+        },
+        {
+          "type": "string",
+          "name": "pageNumber",
+          "isRequired": true,
+          "value": "0"
+        },
+        {
+          "type": "string",
+          "name": "pageSize",
+          "isRequired": true,
+          "value": "20"
+        }
+      ]
+    },
+    {
+      "actionName": "getCategoryById",
+      "path": "{categoryId}",
+      "method": "GET",
+      "responses": {
+        "200": {
+          "name": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "CategoryResponse",
+                "objectType": "dto",
+                "name": "data",
+                "collectionType": "none",
+                "module": "configuration"
+              }
+            }
+          }
+        }
+      },
+      "pathVariables": [
+        {
+          "name": "categoryId",
+          "type": "string",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "actionName": "createCategory",
+      "method": "POST",
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "CategoryRequest",
+              "collectionType": "none",
+              "name": "data",
+              "objectType": "dto",
+              "module": "configuration"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "name": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "CategoryResponse",
+                "objectType": "dto",
+                "name": "data",
+                "collectionType": "none",
+                "module": "configuration"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "actionName": "updateCategory",
+      "path": "{categoryId}",
+      "method": "PUT",
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "CategoryRequest",
+              "collectionType": "none",
+              "name": "data",
+              "objectType": "dto",
+              "module": "configuration"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "name": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "CategoryResponse",
+                "objectType": "dto",
+                "name": "data",
+                "collectionType": "none",
+                "module": "configuration"
+              }
+            }
+          }
+        }
+      },
+      "pathVariables": [
+        {
+          "name": "categoryId",
+          "type": "string",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "actionName": "moveCategory",
+      "path": "{categoryId}/move",
+      "method": "PATCH",
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "MoveCategory",
+              "collectionType": "none",
+              "name": "data",
+              "objectType": "dto",
+              "module": "configuration"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "name": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "name": "data",
+                "collectionType": "map"
+              }
+            }
+          }
+        }
+      },
+      "pathVariables": [
+        {
+          "name": "categoryId",
+          "type": "string",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "actionName": "enableCategory",
+      "path": "{categoryId}/ativar",
+      "method": "PATCH",
+      "responses": {
+        "200": {
+          "name": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "name": "data",
+                "collectionType": "map"
+              }
+            }
+          }
+        }
+      },
+      "pathVariables": [
+        {
+          "name": "categoryId",
+          "type": "string",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "actionName": "disableCategory",
+      "path": "{categoryId}/desativar",
+      "method": "PATCH",
+      "responses": {
+        "200": {
+          "name": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "name": "data",
+                "collectionType": "map"
+              }
+            }
+          }
+        }
+      },
+      "pathVariables": [
+        {
+          "name": "categoryId",
+          "type": "string",
+          "isRequired": true
+        }
+      ]
+    }
+  ],
+  "id": "lemlc6vzb8-moveCategoryLicenciamento-getListCategoriasLicenciamento-getListCategoriasLicenciamento"
+}

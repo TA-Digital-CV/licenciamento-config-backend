@@ -1,6 +1,7 @@
 package cv.igrp.license.configuration.infrastructure.mappers;
 
 
+import cv.igrp.license.configuration.application.dto.CategoryResponseDTO;
 import cv.igrp.license.configuration.domain.models.Category;
 import cv.igrp.license.configuration.domain.valueobject.CategoryId;
 import cv.igrp.license.shared.infrastructure.persistence.entity.CategoryEntity;
@@ -112,18 +113,18 @@ public class CategoryMapper {
     }
 
 
-    /*public CategoryResponseDTO toDTO(Category category) {
+    public CategoryResponseDTO toDTO(Category category) {
         if (category == null) return null;
 
         CategoryResponseDTO dto = new CategoryResponseDTO();
-        dto.setId(category.getId().getStringValor());
+        dto.setId(category.getId().getIdentificador().getStringValor());
         dto.setCode(category.getCode());
         dto.setName(category.getName());
         dto.setLevel(category.getLevel());
         dto.setPath(category.getPath());
 
         if (category.getSector() != null) {
-            dto.setSectorId(category.getSector().getId().getStringValor());
+            dto.setSectorId(category.getSector().getId().getIdentificador().getStringValor());
             dto.setSectorName(category.getSector().getName());
         }
 
@@ -135,6 +136,6 @@ public class CategoryMapper {
         }
 
         return dto;
-    }*/
+    }
 
 }

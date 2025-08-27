@@ -1,6 +1,7 @@
 package cv.igrp.license.configuration.infrastructure.mappers;
 
 
+import cv.igrp.license.configuration.application.dto.LicenseTypeResponseDTO;
 import cv.igrp.license.configuration.domain.models.LicenseType;
 import cv.igrp.license.configuration.domain.valueobject.CategoryId;
 import cv.igrp.license.configuration.domain.valueobject.LicenseTypeId;
@@ -79,16 +80,16 @@ public class LicenseTypeMapper {
         return entity;
     }
 
-    /*public LicenseTypeResponseDTO toResponseDTO(LicenseType licenseType) {
+    public LicenseTypeResponseDTO toResponseDTO(LicenseType licenseType) {
         if (licenseType == null) return null;
 
         LicenseTypeResponseDTO dto = new LicenseTypeResponseDTO();
-        dto.setId(licenseType.getId().getStringValor());
+        dto.setId(licenseType.getId().getIdentificador().getStringValor());
         dto.setName(licenseType.getName());
         dto.setDescription(licenseType.getDescription());
         dto.setCode(licenseType.getCode());
         dto.setCategoryId(licenseType.getCategoryId() != null
-                ? licenseType.getCategoryId().getStringValor() : null);
+                ? licenseType.getCategoryId().getIdentificador().getStringValor() : null);
         dto.setLicensingModelKey(licenseType.getLicensingModelKey());
         dto.setValidityPeriod(licenseType.getValidityPeriod());
         dto.setValidityUnitKey(licenseType.getValidityUnitKey());
@@ -104,6 +105,6 @@ public class LicenseTypeMapper {
                 ? licenseType.getMetadata().getValores() : new HashMap<>());
 
         return dto;
-    }*/
+    }
 
 }

@@ -4,6 +4,8 @@ import cv.igrp.license.shared.infrastructure.persistence.entity.LicenseTypeEntit
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.repository.history.RevisionRepository;
@@ -15,4 +17,9 @@ public interface LicenseTypeEntityRepository extends
     RevisionRepository<LicenseTypeEntity, UUID, Integer>
 {
 
+  Optional<LicenseTypeEntity> findByCode(String code);
+
+  boolean existsByCode(String code);
+
+  List<LicenseTypeEntity> findAllByActiveTrue();
 }
