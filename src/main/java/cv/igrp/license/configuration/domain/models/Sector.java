@@ -1,6 +1,6 @@
 package cv.igrp.license.configuration.domain.models;
 
-import cv.igrp.license.shared.domain.valueobject.Identificador;
+import cv.igrp.license.configuration.domain.valueobject.SectorId;
 import cv.igrp.license.shared.domain.valueobject.Metadata;
 import lombok.Getter;
 
@@ -9,7 +9,7 @@ import java.util.Objects;
 @Getter
 public class Sector {
 
-    private final Identificador id;   // Identificador único (UUID encapsulado)
+    private final SectorId id;
     private String name;
     private String description;
     private String sectorTypeKey;
@@ -18,7 +18,7 @@ public class Sector {
     private Integer sortOrder;
     private Metadata metadata;
 
-    private Sector(Identificador id,
+    private Sector(SectorId id,
                    String name,
                    String description,
                    String sectorTypeKey,
@@ -48,7 +48,7 @@ public class Sector {
                                    Metadata metadata) {
 
         return new Sector(
-                Identificador.gerarNovo(),
+            SectorId.gerarNovo(),
                 name,
                 description,
                 sectorTypeKey,
@@ -62,7 +62,7 @@ public class Sector {
     /**
      * Reconstruir um Sector já existente (ex: vindo da base de dados)
      */
-    public static Sector reconstruir(Identificador id,
+    public static Sector reconstruir(SectorId id,
                                      String name,
                                      String description,
                                      String sectorTypeKey,

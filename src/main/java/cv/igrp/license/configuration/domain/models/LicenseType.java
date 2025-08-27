@@ -1,5 +1,7 @@
 package cv.igrp.license.configuration.domain.models;
 
+import cv.igrp.license.configuration.domain.valueobject.CategoryId;
+import cv.igrp.license.configuration.domain.valueobject.LicenseTypeId;
 import cv.igrp.license.shared.domain.valueobject.Identificador;
 import cv.igrp.license.shared.domain.valueobject.Metadata;
 import lombok.Getter;
@@ -10,7 +12,7 @@ import java.util.Objects;
 @Getter
 public class LicenseType {
 
-    private final Identificador id;
+    private final LicenseTypeId id;
     private String name;
     private String description;
     private String code;
@@ -28,9 +30,9 @@ public class LicenseType {
     private boolean active;
     private Metadata metadata;
     private Integer sortOrder;
-    private Identificador categoryId;
+    private CategoryId categoryId;
 
-    private LicenseType(Identificador id,
+    private LicenseType(LicenseTypeId id,
                         String name,
                         String description,
                         String code,
@@ -48,7 +50,7 @@ public class LicenseType {
                         boolean active,
                         Metadata metadata,
                         Integer sortOrder,
-                        Identificador categoryId) {
+                        CategoryId categoryId) {
 
         this.id = Objects.requireNonNull(id, "Identificador não pode ser nulo");
         this.name = Objects.requireNonNull(name, "Nome não pode ser nulo");
@@ -87,10 +89,10 @@ public class LicenseType {
                                         String currencyCode,
                                         Integer sortOrder,
                                         Metadata metadata,
-                                        Identificador categoryId) {
+                                        CategoryId categoryId) {
 
         return new LicenseType(
-                Identificador.gerarNovo(),
+            LicenseTypeId.gerarNovo(),
                 name,
                 description,
                 code,
@@ -112,7 +114,7 @@ public class LicenseType {
         );
     }
 
-    public static LicenseType reconstruir(Identificador id,
+    public static LicenseType reconstruir(LicenseTypeId id,
                                           String name,
                                           String description,
                                           String code,
@@ -130,7 +132,7 @@ public class LicenseType {
                                           boolean active,
                                           Metadata metadata,
                                           Integer sortOrder,
-                                          Identificador categoryId) {
+                                          CategoryId categoryId) {
 
         return new LicenseType(
                 id,
@@ -171,7 +173,7 @@ public class LicenseType {
                           String currencyCode,
                           Integer sortOrder,
                           Metadata metadata,
-                          Identificador categoryId) {
+                          CategoryId categoryId) {
 
         this.name = Objects.requireNonNull(name, "Nome não pode ser nulo");
         this.description = description;
