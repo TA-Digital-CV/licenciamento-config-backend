@@ -23,6 +23,10 @@ public class LicenseTypeId {
     return new LicenseTypeId(Identificador.from(uuid));
   }
 
+  public static LicenseTypeId from(java.util.UUID uuid) {
+    return new LicenseTypeId(Identificador.from(uuid));
+  }
+
   public static LicenseTypeId gerarNovo() {
     return new LicenseTypeId(Identificador.gerarNovo());
   }

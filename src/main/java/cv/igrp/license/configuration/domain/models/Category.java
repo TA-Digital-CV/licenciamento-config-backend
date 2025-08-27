@@ -23,7 +23,7 @@ public class Category {
   private Metadata metadata;
   private String path;
 
-  private Identificador parentId;       // apenas referência
+  private CategoryId parentId;       // apenas referência
   private Sector sector;                // referência completa
   private List<Category> children;  // filhos completos
 
@@ -36,7 +36,7 @@ public class Category {
                    Integer sortOrder,
                    Metadata metadata,
                    String path,
-                   Identificador parentId,
+                   CategoryId parentId,
                    Sector sector,
                    List<Category> children) {
 
@@ -62,7 +62,7 @@ public class Category {
                                    Integer sortOrder,
                                    Metadata metadata,
                                    String path,
-                                   Identificador parentId,
+                                   CategoryId parentId,
                                    Sector sector) {
     return new Category(
         CategoryId.gerarNovo(),
@@ -87,7 +87,7 @@ public class Category {
                         Integer sortOrder,
                         Metadata metadata,
                         String path,
-                        Identificador parentId,
+                        CategoryId parentId,
                         Sector sector) {
 
     this.name = Objects.requireNonNull(name, "Nome não pode ser nulo");
@@ -112,7 +112,7 @@ public class Category {
       Integer sortOrder,
       Metadata metadata,
       String path,
-      Identificador parentId,
+      CategoryId parentId,
       Sector sector,
       List<Category> children) {
 
@@ -155,7 +155,7 @@ public class Category {
     return this.active;
   }
 
-  public void move(Identificador newParentId) {
+  public void move(CategoryId newParentId) {
     this.parentId = newParentId;
   }
 

@@ -3,6 +3,7 @@ package cv.igrp.license.configuration.domain.valueobject;
 import cv.igrp.license.shared.domain.valueobject.Identificador;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class SectorId {
 
@@ -17,6 +18,10 @@ public class SectorId {
 
   public static SectorId from(Identificador identificador) {
     return new SectorId(identificador);
+  }
+
+  public static SectorId from(UUID uuid) {
+    return new SectorId(Identificador.from(uuid));
   }
 
   public static SectorId from(String uuid) {

@@ -23,6 +23,10 @@ public class CategoryId {
     return new CategoryId(Identificador.from(uuid));
   }
 
+  public static CategoryId from(java.util.UUID uuid) {
+    return new CategoryId(Identificador.from(uuid));
+  }
+
   public static CategoryId gerarNovo() {
     return new CategoryId(Identificador.gerarNovo());
   }
