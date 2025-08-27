@@ -4,6 +4,7 @@ package cv.igrp.license.configuration.domain.repository;
 
 import cv.igrp.license.configuration.domain.filter.SectorFilter;
 import cv.igrp.license.configuration.domain.models.Sector;
+import cv.igrp.license.configuration.domain.valueobject.SectorId;
 import cv.igrp.license.shared.domain.valueobject.Identificador;
 
 import java.util.List;
@@ -13,13 +14,13 @@ public interface SectorRepository {
 
     Sector save(Sector sector);
 
-    Optional<Sector> findById(Identificador id);
+    Optional<Sector> findById(SectorId id);
 
     List<Sector> findAll();
 
     List<Sector> findAll(SectorFilter filter);
 
-    void delete(Identificador id);
+    void delete(SectorId id);
 
     boolean existsByCode(String code);
 }
