@@ -23,5 +23,7 @@ public interface CategoryEntityRepository extends
 
   Optional<CategoryEntity> findByCode(String code);
 
+  boolean existsByCodeAndActive(String code, boolean active);
+
   List<CategoryEntity> findAllByActiveTrue();
 }

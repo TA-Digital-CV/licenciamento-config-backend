@@ -21,4 +21,6 @@ public interface SectorEntityRepository extends
 
   List<SectorEntity> findAllByActiveTrue();
 
+  boolean existsByCodeAndActive(String code, boolean active);
+
 }

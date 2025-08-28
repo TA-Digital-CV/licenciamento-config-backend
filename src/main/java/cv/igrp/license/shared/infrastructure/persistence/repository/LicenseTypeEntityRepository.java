@@ -21,5 +21,7 @@ public interface LicenseTypeEntityRepository extends
 
   boolean existsByCode(String code);
 
+  boolean existsByCodeAndActive(String code, boolean active);
+
   List<LicenseTypeEntity> findAllByActiveTrue();
 }
