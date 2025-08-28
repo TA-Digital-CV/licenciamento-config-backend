@@ -45,7 +45,9 @@ public class CreateCategoryCommandHandler implements CommandHandler<CreateCatego
      var sector = sectorRepository.findById(SectorId.from(dto.getSectorId()))
          .orElseThrow(() -> IgrpResponseStatusException.notFound("Sector not found"));
 
-     CategoryId parentId = dto.getParentId() != null ? CategoryId.from(dto.getParentId()) : null;
+     var parent = categoryRepository.findById(CategoryId.from(dto.getParentId())).orElseThrow(
+          () -> IgrpResponseStatusException.notFound("Parent Category not found")
+     );
 
      var metadata = Metadata.fromMap(dto.getMetadata());
 
@@ -53,11 +55,9 @@ public class CreateCategoryCommandHandler implements CommandHandler<CreateCatego
          dto.getName(),
          dto.getDescription(),
          dto.getCode(),
-         0, // todo level inicial, pode ser calculado depois
          dto.getSortOrder(),
          metadata,
-         "", // todo path inicial, pode atualizar depois
-         parentId,
+         parent,
          sector
      );
 

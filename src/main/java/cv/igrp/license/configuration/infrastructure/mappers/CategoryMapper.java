@@ -46,7 +46,7 @@ public class CategoryMapper {
                 entity.getSortOrder(),
                 metadataMapper.toDomain(entity.getMetadata()),
                 entity.getPath(),
-                entity.getParentId() != null ? CategoryId.from(entity.getParentId().getId()) : null,
+                entity.getParentId() != null ? this.toDomain(entity.getParentId()) : null,
                 entity.getSectorId() != null ? sectorMapper.toDomain(entity.getSectorId()) : null,
                 children
         );
@@ -84,17 +84,17 @@ public class CategoryMapper {
         entity.setId(domain.getId().getIdentificador().getValor());
         entity.setName(domain.getName());
         entity.setDescription(domain.getDescription());
-        entity.setCode(domain.getCode());
+        entity.setCode(domain.getCode().getValue());
         entity.setActive(domain.isAtivo());
         entity.setLevel(domain.getLevel());
         entity.setSortOrder(domain.getSortOrder());
         entity.setMetadata(metadataMapper.toEntity(domain.getMetadata()));
-        entity.setPath(domain.getPath());
+        entity.setPath(domain.getPath().getValue());
 
-        if (domain.getParentId() != null) {
-            CategoryEntity parentEntity = new CategoryEntity();
-            parentEntity.setId(domain.getParentId().getIdentificador().getValor());
-            entity.setParentId(parentEntity);
+        if (domain.getParent() != null) {
+         /* entity.setParentId(entityManager
+              .getReference(CategoryEntity.class, domain.getParent().getId().getIdentificador().getValor()));*/
+          entity.setParentId(this.toEntity(domain.getParent()));
         }
 
         if (domain.getSector() != null) {
@@ -118,10 +118,10 @@ public class CategoryMapper {
 
         CategoryResponseDTO dto = new CategoryResponseDTO();
         dto.setId(category.getId().getIdentificador().getStringValor());
-        dto.setCode(category.getCode());
+        dto.setCode(category.getCode().getValue());
         dto.setName(category.getName());
         dto.setLevel(category.getLevel());
-        dto.setPath(category.getPath());
+        dto.setPath(category.getPath().getValue());
 
         if (category.getSector() != null) {
             dto.setSectorId(category.getSector().getId().getIdentificador().getStringValor());

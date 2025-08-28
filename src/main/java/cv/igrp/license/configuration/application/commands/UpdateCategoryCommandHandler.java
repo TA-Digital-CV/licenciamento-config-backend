@@ -48,17 +48,21 @@ public class UpdateCategoryCommandHandler implements CommandHandler<UpdateCatego
      var sector = sectorRepository.findById(SectorId.from(dto.getSectorId()))
          .orElseThrow(() -> IgrpResponseStatusException.notFound("Sector not found"));
 
+
+     var parent = categoryRepository.findById(CategoryId.from(dto.getParentId())).orElseThrow(
+         () -> IgrpResponseStatusException.notFound("Parent Category not found")
+     );
+
+
      var metadata = Metadata.fromMap(dto.getMetadata());
 
      category.atualizar(
          dto.getName(),
          dto.getDescription(),
          dto.getCode(),
-         category.getLevel(), // manter level atual
          dto.getSortOrder(),
          metadata,
-         category.getPath(),  // manter path atual
-         dto.getParentId() != null ? CategoryId.from(dto.getParentId()) : null,
+         parent,
          sector
      );
 

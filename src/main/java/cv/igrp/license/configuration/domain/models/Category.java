@@ -1,7 +1,9 @@
 package cv.igrp.license.configuration.domain.models;
 
 
+import cv.igrp.license.configuration.domain.valueobject.CategoryCode;
 import cv.igrp.license.configuration.domain.valueobject.CategoryId;
+import cv.igrp.license.configuration.domain.valueobject.CategoryPath;
 import cv.igrp.license.shared.domain.exceptions.IgrpResponseStatusException;
 import cv.igrp.license.shared.domain.valueobject.Identificador;
 import cv.igrp.license.shared.domain.valueobject.Metadata;
@@ -17,27 +19,27 @@ public class Category {
   private final CategoryId id;
   private String name;
   private String description;
-  private String code;
+  private CategoryCode code;
   private boolean active;
   private Integer level;
   private Integer sortOrder;
   private Metadata metadata;
-  private String path;
+  private CategoryPath path;
 
-  private CategoryId parentId;       // apenas referência
-  private Sector sector;                // referência completa
-  private List<Category> children;  // filhos completos
+  private Category parent;
+  private Sector sector;
+  private List<Category> children;
 
   private Category(CategoryId id,
                    String name,
                    String description,
-                   String code,
+                   CategoryCode code,
                    boolean active,
                    Integer level,
                    Integer sortOrder,
                    Metadata metadata,
-                   String path,
-                   CategoryId parentId,
+                    CategoryPath path,
+                   Category parent,
                    Sector sector,
                    List<Category> children) {
 
@@ -50,7 +52,7 @@ public class Category {
     this.sortOrder = sortOrder;
     this.metadata = metadata;
     this.path = path;
-    this.parentId = parentId;
+    this.parent = parent;
     this.sector = sector;
     this.children = children != null ? children : new ArrayList<>();
 
@@ -59,59 +61,85 @@ public class Category {
   public static Category criarNovo(String name,
                                    String description,
                                    String code,
-                                   Integer level,
                                    Integer sortOrder,
                                    Metadata metadata,
-                                   String path,
-                                   CategoryId parentId,
+                                   Category parent,
                                    Sector sector) {
 
     Objects.requireNonNull(name, "Nome não pode ser nulo");
     Objects.requireNonNull(code, "Código não pode ser nulo");
 
-    validateCategoryLevel(level);
+
+    CategoryCode categoryCode = CategoryCode.of(code);
+
+    // Regra 1: sem parent → nível 1
+    if (parent == null && categoryCode.getLevel() != 1) {
+      throw IgrpResponseStatusException.badRequest(
+          "Categoria sem parent deve ter código de nível 1 (ex: 'AGR')"
+      );
+    }
+
+    // Regra 2: com parent → nível = parent.level + 1
+    if (parent != null && categoryCode.getLevel() != parent.getLevel() + 1) {
+      throw IgrpResponseStatusException.badRequest(
+          "Categoria com parent deve ter código de nível " + (parent.getLevel() + 1) +
+              ". Código fornecido: '" + code + "'"
+      );
+    }
 
     return new Category(
         CategoryId.gerarNovo(),
         name,
         description,
-        code,
+        categoryCode,
         true,
-        level,
+        categoryCode.getLevel(),
         sortOrder,
         metadata,
-        path,
-        parentId,
+        null,
+        parent,
         sector,
         new ArrayList<>()
     );
   }
 
-  private static void validateCategoryLevel(Integer level){
-
-    if(level < 1 || level > 5){
-      throw IgrpResponseStatusException.badRequest("Nível de hierarquia inválido. Deve estar entre 1 e 5.");
-    }
-  }
 
   public void atualizar(String name,
                         String description,
                         String code,
-                        Integer level,
                         Integer sortOrder,
                         Metadata metadata,
-                        String path,
-                        CategoryId parentId,
+                        Category parent,
                         Sector sector) {
+
+    Objects.requireNonNull(code, "Código não pode ser nulo");
+
+    CategoryCode categoryCode = CategoryCode.of(code);
+
+    // Regra 1: sem parent → nível 1
+    if (parent == null && categoryCode.getLevel() != 1) {
+      throw IgrpResponseStatusException.badRequest(
+          "Categoria sem parent deve ter código de nível 1 (ex: 'AGR')"
+      );
+    }
+
+    // Regra 2: com parent → nível = parent.level + 1
+    if (parent != null && categoryCode.getLevel() != parent.getLevel() + 1) {
+      throw IgrpResponseStatusException.badRequest(
+          "Categoria com parent deve ter código de nível " + (parent.getLevel() + 1) +
+              ". Código fornecido: '" + code + "'"
+      );
+    }
+
 
     this.name = Objects.requireNonNull(name, "Nome não pode ser nulo");
     this.description = description;
-    this.code = Objects.requireNonNull(code, "Código não pode ser nulo");
-    this.level = level;
+    this.code = categoryCode;
+    this.level = null;
     this.sortOrder = sortOrder;
     this.metadata = metadata;
-    this.path = path;
-    this.parentId = parentId;
+    this.path = null;
+    this.parent = parent;
     this.sector = sector;
   }
 
@@ -126,7 +154,7 @@ public class Category {
       Integer sortOrder,
       Metadata metadata,
       String path,
-      CategoryId parentId,
+      Category parent,
       Sector sector,
       List<Category> children) {
 
@@ -134,13 +162,13 @@ public class Category {
         id,
         name,
         description,
-        code,
+        CategoryCode.of(code),
         active,
         level,
         sortOrder,
         metadata,
-        path,
-        parentId,
+        path!=null ? CategoryPath.of(path) : null,
+        parent,
         sector,
         children != null ? children : new ArrayList<>()
     );
@@ -169,8 +197,8 @@ public class Category {
     return this.active;
   }
 
-  public void move(CategoryId newParentId) {
-    this.parentId = newParentId;
+  public void move(Category newParentId) {
+    this.parent = newParentId;
   }
 
 }
