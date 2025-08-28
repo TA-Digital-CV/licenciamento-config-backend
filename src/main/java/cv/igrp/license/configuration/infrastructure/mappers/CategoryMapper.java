@@ -135,6 +135,8 @@ public class CategoryMapper {
             dto.setChildren(childrenDTOs);
         }
 
+        dto.setMetadata(category.getMetadata().getValores());
+
         return dto;
     }
 

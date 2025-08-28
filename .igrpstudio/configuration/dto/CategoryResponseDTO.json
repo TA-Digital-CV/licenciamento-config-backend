@@ -102,6 +102,19 @@
       "primaryKey": false,
       "collectionType": "list",
       "module": "configuration"
+    },
+    {
+      "name": "metadata",
+      "objectType": "java",
+      "type": "string",
+      "required": false,
+      "before": false,
+      "after": false,
+      "positive": false,
+      "isEmail": false,
+      "isUrl": false,
+      "primaryKey": false,
+      "collectionType": "map"
     }
   ],
   "id": "kldy9y9h4j"

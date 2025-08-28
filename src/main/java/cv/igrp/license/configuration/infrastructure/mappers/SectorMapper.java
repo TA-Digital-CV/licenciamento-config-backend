@@ -54,6 +54,7 @@ public class SectorMapper {
         dto.setSectorType(sector.getSectorTypeKey());
         dto.setActive(sector.isActive());
         dto.setSortOrder(sector.getSortOrder());
+        dto.setMetadata(sector.getMetadata().getValores());
 
         return dto;
     }
