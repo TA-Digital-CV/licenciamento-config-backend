@@ -2,6 +2,7 @@ package cv.igrp.license.configuration.domain.models;
 
 
 import cv.igrp.license.configuration.domain.valueobject.CategoryId;
+import cv.igrp.license.shared.domain.exceptions.IgrpResponseStatusException;
 import cv.igrp.license.shared.domain.valueobject.Identificador;
 import cv.igrp.license.shared.domain.valueobject.Metadata;
 import lombok.Getter;
@@ -64,6 +65,12 @@ public class Category {
                                    String path,
                                    CategoryId parentId,
                                    Sector sector) {
+
+    Objects.requireNonNull(name, "Nome não pode ser nulo");
+    Objects.requireNonNull(code, "Código não pode ser nulo");
+
+    validateCategoryLevel(level);
+
     return new Category(
         CategoryId.gerarNovo(),
         name,
@@ -78,6 +85,13 @@ public class Category {
         sector,
         new ArrayList<>()
     );
+  }
+
+  private static void validateCategoryLevel(Integer level){
+
+    if(level < 1 || level > 5){
+      throw IgrpResponseStatusException.badRequest("Nível de hierarquia inválido. Deve estar entre 1 e 5.");
+    }
   }
 
   public void atualizar(String name,
