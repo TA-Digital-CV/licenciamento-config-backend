@@ -74,8 +74,6 @@ public class LicenseTypeMapper {
         if (domain.getCategoryId() != null) {
             entity.setCategoryId(entityManager
                     .getReference(CategoryEntity.class, domain.getCategoryId().getIdentificador().getValor()));
-            /*CategoryEntity parentEntity = new CategoryEntity();
-            entity.setCategoryId(parentEntity);*/
         }
         return entity;
     }
