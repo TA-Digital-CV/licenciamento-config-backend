@@ -167,7 +167,7 @@ public class Category {
         level,
         sortOrder,
         metadata,
-        path!=null ? CategoryPath.of(path) : null,
+        path!=null && !path.isBlank() ? CategoryPath.of(path) : null,
         parent,
         sector,
         children != null ? children : new ArrayList<>()

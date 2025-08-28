@@ -14,43 +14,63 @@ import java.util.List;
 @Component
 public class CategoryMapper {
 
-    private final MetadataMapper metadataMapper;
+  private final MetadataMapper metadataMapper;
 
-    private final EntityManager entityManager;
+  private final EntityManager entityManager;
 
-    private final SectorMapper sectorMapper;
+  private final SectorMapper sectorMapper;
 
-    public CategoryMapper(MetadataMapper metadataMapper, EntityManager entityManager, SectorMapper sectorMapper) {
-        this.metadataMapper = metadataMapper;
-        this.entityManager = entityManager;
-        this.sectorMapper = sectorMapper;
+  public CategoryMapper(MetadataMapper metadataMapper, EntityManager entityManager, SectorMapper sectorMapper) {
+    this.metadataMapper = metadataMapper;
+    this.entityManager = entityManager;
+    this.sectorMapper = sectorMapper;
+  }
+
+  public Category toDomain(CategoryEntity entity) {
+    if (entity == null) return null;
+
+    // Mapear filhos recursivamente
+    List<Category> children = entity.getChildrens() != null
+        ? entity.getChildrens().stream()
+        .map(this::toDomain)
+        .toList()
+        : new ArrayList<>();
+
+    Category parent = null;
+    if (entity.getParentId() != null) {
+    parent = Category.reconstruir(
+        CategoryId.from(entity.getParentId().getId()),
+        entity.getParentId().getName(),
+        entity.getParentId().getDescription(),
+        entity.getParentId().getCode(),
+        entity.getParentId().isActive(),
+        entity.getParentId().getLevel(),
+        entity.getParentId().getSortOrder(),
+        metadataMapper.toDomain(entity.getParentId().getMetadata()),
+        entity.getParentId().getPath(),
+        null, // Evitar recursão infinita
+        entity.getParentId().getSectorId() != null ? sectorMapper.toDomain(entity.getParentId().getSectorId()) : null,
+        new ArrayList<>() // Evitar recursão infinita
+    );
+
     }
 
-    public Category toDomain(CategoryEntity entity) {
-        if (entity == null) return null;
 
-        // Mapear filhos recursivamente
-        List<Category> children = entity.getChildrens() != null
-                ? entity.getChildrens().stream()
-                .map(this::toDomain)
-                .toList()
-                : new ArrayList<>();
-
-        return Category.reconstruir(
-            CategoryId.from(entity.getId()),
-                entity.getName(),
-                entity.getDescription(),
-                entity.getCode(),
-                entity.isActive(),
-                entity.getLevel(),
-                entity.getSortOrder(),
-                metadataMapper.toDomain(entity.getMetadata()),
-                entity.getPath(),
-                entity.getParentId() != null ? this.toDomain(entity.getParentId()) : null,
-                entity.getSectorId() != null ? sectorMapper.toDomain(entity.getSectorId()) : null,
-                children
-        );
-    }
+    return Category.reconstruir(
+        CategoryId.from(entity.getId()),
+        entity.getName(),
+        entity.getDescription(),
+        entity.getCode(),
+        entity.isActive(),
+        entity.getLevel(),
+        entity.getSortOrder(),
+        metadataMapper.toDomain(entity.getMetadata()),
+        entity.getPath(),
+        parent,
+        entity.getSectorId() != null ? sectorMapper.toDomain(entity.getSectorId()) : null,
+        children
+    );
+  }
 
     /*public CategoryEntity toEntity(Category domain) {
         CategoryEntity entity = new CategoryEntity();
@@ -77,67 +97,67 @@ public class CategoryMapper {
         return entity;
     }*/
 
-    public CategoryEntity toEntity(Category domain) {
-        if (domain == null) return null;
+  public CategoryEntity toEntity(Category domain) {
+    if (domain == null) return null;
 
-        CategoryEntity entity = new CategoryEntity();
-        entity.setId(domain.getId().getIdentificador().getValor());
-        entity.setName(domain.getName());
-        entity.setDescription(domain.getDescription());
-        entity.setCode(domain.getCode().getValue());
-        entity.setActive(domain.isAtivo());
-        entity.setLevel(domain.getLevel());
-        entity.setSortOrder(domain.getSortOrder());
-        entity.setMetadata(metadataMapper.toEntity(domain.getMetadata()));
-        entity.setPath(domain.getPath().getValue());
+    CategoryEntity entity = new CategoryEntity();
+    entity.setId(domain.getId().getIdentificador().getValor());
+    entity.setName(domain.getName());
+    entity.setDescription(domain.getDescription());
+    entity.setCode(domain.getCode().getValue());
+    entity.setActive(domain.isAtivo());
+    entity.setLevel(domain.getLevel());
+    entity.setSortOrder(domain.getSortOrder());
+    entity.setMetadata(metadataMapper.toEntity(domain.getMetadata()));
+    entity.setPath(domain.getPath() != null ? domain.getPath().getValue() : null);
 
-        if (domain.getParent() != null) {
+    if (domain.getParent() != null) {
          /* entity.setParentId(entityManager
               .getReference(CategoryEntity.class, domain.getParent().getId().getIdentificador().getValor()));*/
-          entity.setParentId(this.toEntity(domain.getParent()));
-        }
-
-        if (domain.getSector() != null) {
-            entity.setSectorId(sectorMapper.toEntity(domain.getSector()));
-        }
-
-        // filhos (recursivo)
-        if (domain.getChildren() != null) {
-            List<CategoryEntity> childrenEntities = domain.getChildren().stream()
-                    .map(this::toEntity)
-                    .toList();
-            entity.setChildrens(childrenEntities);
-        }
-
-        return entity;
+      entity.setParentId(this.toEntity(domain.getParent()));
     }
 
-
-    public CategoryResponseDTO toDTO(Category category) {
-        if (category == null) return null;
-
-        CategoryResponseDTO dto = new CategoryResponseDTO();
-        dto.setId(category.getId().getIdentificador().getStringValor());
-        dto.setCode(category.getCode().getValue());
-        dto.setName(category.getName());
-        dto.setLevel(category.getLevel());
-        dto.setPath(category.getPath().getValue());
-
-        if (category.getSector() != null) {
-            dto.setSectorId(category.getSector().getId().getIdentificador().getStringValor());
-            dto.setSectorName(category.getSector().getName());
-        }
-
-        if (category.getChildren() != null && !category.getChildren().isEmpty()) {
-            List<CategoryResponseDTO> childrenDTOs = category.getChildren().stream()
-                    .map(this::toDTO)  // mapeamento recursivo
-                    .toList();
-            dto.setChildren(childrenDTOs);
-        }
-
-        dto.setMetadata(category.getMetadata().getValores());
-
-        return dto;
+    if (domain.getSector() != null) {
+      entity.setSectorId(sectorMapper.toEntity(domain.getSector()));
     }
+
+    // filhos (recursivo)
+    if (domain.getChildren() != null) {
+      List<CategoryEntity> childrenEntities = domain.getChildren().stream()
+          .map(this::toEntity)
+          .toList();
+      entity.setChildrens(childrenEntities);
+    }
+
+    return entity;
+  }
+
+
+  public CategoryResponseDTO toDTO(Category category) {
+    if (category == null) return null;
+
+    CategoryResponseDTO dto = new CategoryResponseDTO();
+    dto.setId(category.getId().getIdentificador().getStringValor());
+    dto.setCode(category.getCode().getValue());
+    dto.setName(category.getName());
+    dto.setLevel(category.getLevel());
+    dto.setPath(category.getPath() != null ? category.getPath().getValue() : "");
+
+    if (category.getSector() != null) {
+      dto.setSectorId(category.getSector().getId().getIdentificador().getStringValor());
+      dto.setSectorName(category.getSector().getName());
+    }
+
+    if (category.getChildren() != null && !category.getChildren().isEmpty()) {
+      List<CategoryResponseDTO> childrenDTOs = category.getChildren().stream()
+          .map(this::toDTO)  // mapeamento recursivo
+          .toList();
+      dto.setChildren(childrenDTOs);
+    }
+
+    dto.setMetadata(category.getMetadata().getValores());
+
+    return dto;
+  }
 
 }

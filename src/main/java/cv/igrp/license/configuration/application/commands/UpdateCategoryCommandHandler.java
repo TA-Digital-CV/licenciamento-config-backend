@@ -2,6 +2,7 @@ package cv.igrp.license.configuration.application.commands;
 
 import cv.igrp.framework.core.domain.CommandHandler;
 import cv.igrp.framework.stereotype.IgrpCommandHandler;
+import cv.igrp.license.configuration.domain.models.Category;
 import cv.igrp.license.configuration.domain.repository.CategoryRepository;
 import cv.igrp.license.configuration.domain.repository.SectorRepository;
 import cv.igrp.license.configuration.domain.valueobject.CategoryId;
@@ -48,10 +49,12 @@ public class UpdateCategoryCommandHandler implements CommandHandler<UpdateCatego
      var sector = sectorRepository.findById(SectorId.from(dto.getSectorId()))
          .orElseThrow(() -> IgrpResponseStatusException.notFound("Sector not found"));
 
-
-     var parent = categoryRepository.findById(CategoryId.from(dto.getParentId())).orElseThrow(
-         () -> IgrpResponseStatusException.notFound("Parent Category not found")
-     );
+     Category parent = null;
+     if (dto.getParentId() != null && !dto.getParentId().isBlank()) {
+       parent = categoryRepository.findById(CategoryId.from(dto.getParentId())).orElseThrow(
+           () -> IgrpResponseStatusException.notFound("Parent Category not found")
+       );
+     }
 
 
      var metadata = Metadata.fromMap(dto.getMetadata());

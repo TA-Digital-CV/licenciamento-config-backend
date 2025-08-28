@@ -32,7 +32,7 @@ public class MoveCategoryCommandHandler implements CommandHandler<MoveCategoryCo
          .orElseThrow(() -> IgrpResponseStatusException.notFound(
              "Category with ID '" + command.getCategoryId() + "' not found"));
 
-     CategoryId newParentId = command.getMovecategory().getNewParentId() != null
+     CategoryId newParentId = command.getMovecategory().getNewParentId() != null && !command.getMovecategory().getNewParentId().isBlank()
          ? CategoryId.from(command.getMovecategory().getNewParentId())
          : null;
 
