@@ -42,12 +42,12 @@ public class MoveCategoryCommandHandler implements CommandHandler<MoveCategoryCo
      }
 
 
-     if (newParentId != null && !categoryRepository.existsById(newParentId)) {
-       throw IgrpResponseStatusException.notFound(
-           "Parent category with ID '" + newParentId + "' not found");
-     }
+     var parent = categoryRepository.findById(newParentId).orElseThrow(
+         () -> IgrpResponseStatusException.notFound("Parent Category not found")
+     );
 
-     category.move(newParentId);
+
+     category.move(parent);
 
      categoryRepository.save(category);
 
