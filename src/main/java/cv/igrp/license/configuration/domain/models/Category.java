@@ -181,7 +181,7 @@ public class Category {
 
   private static Integer calculateLevel(Category parent) {
     if (parent == null) {
-      return 1; // raiz sempre nível 1
+      return 0; // raiz sempre nível 0
     }
 
     // Se houver filhos, pega o maior nível deles
@@ -226,10 +226,17 @@ public class Category {
   }
 
   public void move(Category newParent) {
-// Evita ciclo: a categoria não pode se tornar filha de si mesma ou de seus descendentes
-    if (newParent != null && isDescendantOf(newParent)) {
-      throw IgrpResponseStatusException.badRequest("Cannot move category to a descendant category (cycle detected)");
+
+    if (newParent != null) {
+      //ja pertence a essa categoria
+      if (this.parent != null && newParent.getId().equals(this.parent.getId())) {
+        throw IgrpResponseStatusException.badRequest("Category is already under the specified parent");
+      }
+      // Evita ciclo: a categoria não pode se tornar filha de si mesma ou de seus descendentes
+      if (isDescendant(newParent))
+       throw IgrpResponseStatusException.badRequest("Cannot move category to a descendant category (cycle detected)");
     }
+
     this.parent = newParent;
 
     // Calcula o novo nível
@@ -238,19 +245,19 @@ public class Category {
     updateChildrenLevels();
   }
 
-  private boolean isDescendantOf(Category potentialAncestor) {
-    Category current = this;
-    while (current != null) {
-      if (current.getId().equals(potentialAncestor.getId())) {
+  private boolean isDescendant(Category target) {
+    for (Category child : this.children) {
+      if (child.getId().equals(target.getId()) || child.isDescendant(target)) {
         return true;
       }
-      current = current.getParent();
     }
     return false;
   }
 
+
+
   private void updateChildrenLevels() {
-    for (Category child : children) {
+    for (Category child : this.children) {
       child.level = calculateLevel(this);
       child.updateChildrenLevels();
     }
