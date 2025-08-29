@@ -72,7 +72,7 @@ public class Category {
 
     CategoryCode categoryCode = CategoryCode.of(code);
 
-    int level = (parent == null) ? 1 : parent.getLevel() + 1;
+     int level = calculateLevel(parent);;
 
     /*// Regra 1: sem parent → nível 1
     if (parent == null && categoryCode.getLevel() != 1) {
@@ -133,7 +133,7 @@ public class Category {
       );
     }*/
 
-    int level = (parent == null) ? 1 : parent.getLevel() + 1;
+    int level = calculateLevel(parent);
 
     this.name = Objects.requireNonNull(name, "Nome não pode ser nulo");
     this.description = description;
@@ -175,6 +175,17 @@ public class Category {
         sector,
         children != null ? children : new ArrayList<>()
     );
+  }
+
+
+  private static Integer calculateLevel(Category parent) {
+    int level = (parent == null) ? 1 : parent.getLevel() + 1;
+    if (level > 5) {
+      throw IgrpResponseStatusException.badRequest(
+          "Categoria não pode ter nível maior que 5"
+      );
+    }
+    return level;
   }
 
 
