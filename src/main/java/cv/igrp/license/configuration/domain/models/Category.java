@@ -178,6 +178,19 @@ public class Category {
     );
   }
 
+  private void updatePath() {
+    if (parent == null) {
+      this.path = CategoryPath.of(this.id.getValorComoString());
+    } else {
+      this.path = parent.getPath()!=null ? CategoryPath.of(parent.getPath() + "/" + this.id) : null;
+    }
+
+    // Atualiza recursivamente para os filhos
+    for (Category child : children) {
+      child.updatePath();
+    }
+  }
+
 
   private static Integer calculateLevel(Category parent) {
     if (parent == null) {
@@ -200,7 +213,6 @@ public class Category {
     }
     return level;
   }
-
 
 
   public void addChild(Category child) {
@@ -234,7 +246,7 @@ public class Category {
       }
       // Evita ciclo: a categoria não pode se tornar filha de si mesma ou de seus descendentes
       if (isDescendant(newParent))
-       throw IgrpResponseStatusException.badRequest("Cannot move category to a descendant category (cycle detected)");
+        throw IgrpResponseStatusException.badRequest("Cannot move category to a descendant category (cycle detected)");
     }
 
     this.parent = newParent;
@@ -253,7 +265,6 @@ public class Category {
     }
     return false;
   }
-
 
 
   private void updateChildrenLevels() {
