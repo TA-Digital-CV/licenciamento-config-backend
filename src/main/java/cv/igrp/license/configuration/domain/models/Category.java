@@ -38,7 +38,7 @@ public class Category {
                    Integer level,
                    Integer sortOrder,
                    Metadata metadata,
-                    CategoryPath path,
+                   CategoryPath path,
                    Category parent,
                    Sector sector,
                    List<Category> children) {
@@ -72,7 +72,8 @@ public class Category {
 
     CategoryCode categoryCode = CategoryCode.of(code);
 
-     int level = calculateLevel(parent);;
+    int level = calculateLevel(parent);
+    ;
 
     /*// Regra 1: sem parent → nível 1
     if (parent == null && categoryCode.getLevel() != 1) {
@@ -170,7 +171,7 @@ public class Category {
         level,
         sortOrder,
         metadata,
-        path!=null && !path.isBlank() ? CategoryPath.of(path) : null,
+        path != null && !path.isBlank() ? CategoryPath.of(path) : null,
         parent,
         sector,
         children != null ? children : new ArrayList<>()
@@ -179,7 +180,19 @@ public class Category {
 
 
   private static Integer calculateLevel(Category parent) {
-    int level = (parent == null) ? 1 : parent.getLevel() + 1;
+    if (parent == null) {
+      return 1; // raiz sempre nível 1
+    }
+
+    // Se houver filhos, pega o maior nível deles
+    int maxChildLevel = parent.getChildren().stream()
+        .map(Category::getLevel)
+        .filter(Objects::nonNull)
+        .max(Integer::compareTo)
+        .orElse(parent.getLevel()); // se não houver filhos, usa o nível do parent
+
+    int level = maxChildLevel + 1;
+
     if (level > 5) {
       throw IgrpResponseStatusException.badRequest(
           "Categoria não pode ter nível maior que 5"
@@ -187,6 +200,7 @@ public class Category {
     }
     return level;
   }
+
 
 
   public void addChild(Category child) {
@@ -211,8 +225,36 @@ public class Category {
     return this.active;
   }
 
-  public void move(Category newParentId) {
-    this.parent = newParentId;
+  public void move(Category newParent) {
+// Evita ciclo: a categoria não pode se tornar filha de si mesma ou de seus descendentes
+    if (newParent != null && isDescendantOf(newParent)) {
+      throw IgrpResponseStatusException.badRequest("Cannot move category to a descendant category (cycle detected)");
+    }
+    this.parent = newParent;
+
+    // Calcula o novo nível
+    this.level = calculateLevel(newParent);
+    // Atualiza recursivamente os níveis dos filhos
+    updateChildrenLevels();
   }
+
+  private boolean isDescendantOf(Category potentialAncestor) {
+    Category current = this;
+    while (current != null) {
+      if (current.getId().equals(potentialAncestor.getId())) {
+        return true;
+      }
+      current = current.getParent();
+    }
+    return false;
+  }
+
+  private void updateChildrenLevels() {
+    for (Category child : children) {
+      child.level = calculateLevel(this);
+      child.updateChildrenLevels();
+    }
+  }
+
 
 }

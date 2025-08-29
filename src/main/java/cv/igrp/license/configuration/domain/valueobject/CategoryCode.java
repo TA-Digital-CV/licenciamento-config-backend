@@ -21,7 +21,7 @@ public class CategoryCode {
    /* if (!CODE_PATTERN.matcher(value).matches()) {
       throw IgrpResponseStatusException.badRequest("Formato de código inválido. Ex: AGR.001 ou AGR.001.002");
     }*/
-    this.value = value;
+    this.value = value.toUpperCase();
   }
 
   public static CategoryCode of(String value) {
