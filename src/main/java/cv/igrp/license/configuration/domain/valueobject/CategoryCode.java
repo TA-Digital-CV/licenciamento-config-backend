@@ -13,13 +13,14 @@ public class CategoryCode {
 
   private final String value;
 
+
   private CategoryCode(String value) {
     if (value == null || value.isBlank()) {
       throw IgrpResponseStatusException.badRequest("Código da categoria não pode ser vazio");
     }
-    if (!CODE_PATTERN.matcher(value).matches()) {
+   /* if (!CODE_PATTERN.matcher(value).matches()) {
       throw IgrpResponseStatusException.badRequest("Formato de código inválido. Ex: AGR.001 ou AGR.001.002");
-    }
+    }*/
     this.value = value;
   }
 
@@ -33,7 +34,7 @@ public class CategoryCode {
    *     AGR.001  -> level 2
    *     AGR.001.002 -> level 3
    */
-  public int getLevel() {
+  /*public int getLevel() {
     int level = value.split("\\.").length;
     if (level < 1 || level > 5) {
       throw IgrpResponseStatusException.badRequest(
@@ -41,7 +42,7 @@ public class CategoryCode {
       );
     }
     return level;
-  }
+  }*/
 
 
   @Override

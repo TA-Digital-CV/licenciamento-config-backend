@@ -72,7 +72,9 @@ public class Category {
 
     CategoryCode categoryCode = CategoryCode.of(code);
 
-    // Regra 1: sem parent → nível 1
+    int level = (parent == null) ? 1 : parent.getLevel() + 1;
+
+    /*// Regra 1: sem parent → nível 1
     if (parent == null && categoryCode.getLevel() != 1) {
       throw IgrpResponseStatusException.badRequest(
           "Categoria sem parent deve ter código de nível 1 (ex: 'AGR')"
@@ -85,7 +87,7 @@ public class Category {
           "Categoria com parent deve ter código de nível " + (parent.getLevel() + 1) +
               ". Código fornecido: '" + code + "'"
       );
-    }
+    }*/
 
     return new Category(
         CategoryId.gerarNovo(),
@@ -93,7 +95,7 @@ public class Category {
         description,
         categoryCode,
         true,
-        categoryCode.getLevel(),
+        level,
         sortOrder,
         metadata,
         null,
@@ -116,7 +118,7 @@ public class Category {
 
     CategoryCode categoryCode = CategoryCode.of(code);
 
-    // Regra 1: sem parent → nível 1
+   /* // Regra 1: sem parent → nível 1
     if (parent == null && categoryCode.getLevel() != 1) {
       throw IgrpResponseStatusException.badRequest(
           "Categoria sem parent deve ter código de nível 1 (ex: 'AGR')"
@@ -129,13 +131,14 @@ public class Category {
           "Categoria com parent deve ter código de nível " + (parent.getLevel() + 1) +
               ". Código fornecido: '" + code + "'"
       );
-    }
+    }*/
 
+    int level = (parent == null) ? 1 : parent.getLevel() + 1;
 
     this.name = Objects.requireNonNull(name, "Nome não pode ser nulo");
     this.description = description;
     this.code = categoryCode;
-    this.level = null;
+    this.level = level;
     this.sortOrder = sortOrder;
     this.metadata = metadata;
     this.path = null;
