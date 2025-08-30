@@ -200,7 +200,7 @@
               "schema": {
                 "type": "string",
                 "name": "data",
-                "collectionType": "collection"
+                "collectionType": "map"
               }
             }
           }

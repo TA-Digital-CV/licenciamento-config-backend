@@ -193,11 +193,11 @@ public class LicenseType {
         this.categoryId = Objects.requireNonNull(categoryId, "CategoryId não pode ser nulo");
     }
 
-    public void ativar() {
+    public void enable() {
         this.active = true;
     }
 
-    public void desativar() {
+    public void disable() {
         this.active = false;
     }
 

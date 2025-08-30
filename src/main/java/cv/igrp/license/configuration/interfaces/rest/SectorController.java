@@ -36,11 +36,11 @@ public class SectorController {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SectorController.class);
 
-  
+
   private final CommandBus commandBus;
   private final QueryBus queryBus;
 
-  
+
   public SectorController(
     CommandBus commandBus, QueryBus queryBus
   ) {
@@ -66,7 +66,7 @@ public class SectorController {
       )
     }
   )
-  
+
   public ResponseEntity<WrapperListSectorDTO> getListSectors(
     @RequestParam(value = "sectorType", required = false) String sectorType,
     @RequestParam(value = "name", required = false) String name,
@@ -107,7 +107,7 @@ public class SectorController {
       )
     }
   )
-  
+
   public ResponseEntity<SectorResponseDTO> createSector(@Valid @RequestBody SectorRequestDTO createSectorRequest
     )
   {
@@ -144,7 +144,7 @@ public class SectorController {
       )
     }
   )
-  
+
   public ResponseEntity<SectorResponseDTO> updateSector(@Valid @RequestBody SectorRequestDTO updateSectorRequest
     , @PathVariable(value = "sectorId") String sectorId)
   {
@@ -181,7 +181,7 @@ public class SectorController {
       )
     }
   )
-  
+
   public ResponseEntity<SectorResponseDTO> getSectorById(
     @PathVariable(value = "sectorId") String sectorId)
   {
@@ -218,7 +218,7 @@ public class SectorController {
       )
     }
   )
-  
+
   public ResponseEntity<Map<String, ?>> enableSector(
     @PathVariable(value = "sectorId") String sectorId)
   {
@@ -255,8 +255,8 @@ public class SectorController {
       )
     }
   )
-  
-  public ResponseEntity<Collection<String>> disableSector(
+
+  public ResponseEntity<Map<String, ?>> disableSector(
     @PathVariable(value = "sectorId") String sectorId)
   {
 
@@ -264,7 +264,7 @@ public class SectorController {
 
       final var command = new DisableSectorCommand(sectorId);
 
-       ResponseEntity<Collection<String>> response = commandBus.send(command);
+       ResponseEntity<Map<String, ?>> response = commandBus.send(command);
 
        LOGGER.debug("Operation finished");
 

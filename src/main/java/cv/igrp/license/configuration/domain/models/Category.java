@@ -226,11 +226,11 @@ public class Category {
     children.remove(child);
   }
 
-  public void ativar() {
+  public void enable() {
     this.active = true;
   }
 
-  public void desativar() {
+  public void disable() {
     this.active = false;
   }
 

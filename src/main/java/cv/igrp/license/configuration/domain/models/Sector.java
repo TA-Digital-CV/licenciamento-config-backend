@@ -85,11 +85,11 @@ public class Sector {
         this.metadata = metadata;
     }
 
-    public void ativar() {
+    public void enable() {
         this.active = true;
     }
 
-    public void desativar() {
+    public void disable () {
         this.active = false;
     }
 
