@@ -178,6 +178,7 @@ public class Category {
     );
   }
 
+  // todo: rever se é necessário
   private void updatePath() {
     if (parent == null) {
       this.path = CategoryPath.of(this.id.getValorComoString());
@@ -194,7 +195,7 @@ public class Category {
 
   private static Integer calculateLevel(Category parent) {
     if (parent == null) {
-      return 0; // raiz sempre nível 0
+      return 1; // raiz sempre nível 0
     }
 
     // Se houver filhos, pega o maior nível deles
@@ -206,11 +207,11 @@ public class Category {
 
     int level = maxChildLevel + 1;
 
-    if (level > 5) {
+    /*if (level > 5) {
       throw IgrpResponseStatusException.badRequest(
           "Categoria não pode ter nível maior que 5"
       );
-    }
+    }*/
     return level;
   }
 
