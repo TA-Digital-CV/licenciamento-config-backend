@@ -99,4 +99,9 @@ public class SectorRepositoryImpl implements SectorRepository {
     public boolean existsByCode(String code) {
         return sectorEntityRepository.existsByCode(code);
     }
+
+  @Override
+  public boolean existsByCodeAndActive(String code) {
+    return sectorEntityRepository.existsByCodeAndActive(code, true);
+  }
 }

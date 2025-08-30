@@ -21,4 +21,7 @@ public interface LicenseTypeRepository {
     void delete(LicenseTypeId id);
 
     boolean existsByCode(String code);
+
+  boolean existsByCodeAndActive(String code);
+
 }

@@ -105,4 +105,9 @@ public class LicenseTypeRepositoryImpl implements LicenseTypeRepository {
     public boolean existsByCode(String code) {
         return licenseTypeEntityRepository.existsByCode(code);
     }
+
+  @Override
+  public boolean existsByCodeAndActive(String code) {
+    return licenseTypeEntityRepository.existsByCodeAndActive(code, true);
+  }
 }

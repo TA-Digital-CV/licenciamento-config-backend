@@ -107,6 +107,11 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     }
 
   @Override
+  public boolean existsByCodeAndActive(String code) {
+    return categoryEntityRepository.existsByCodeAndActive(code, true);
+  }
+
+  @Override
   public boolean existsById(CategoryId id) {
     return categoryEntityRepository.existsById(id.getIdentificador().getValor());
   }

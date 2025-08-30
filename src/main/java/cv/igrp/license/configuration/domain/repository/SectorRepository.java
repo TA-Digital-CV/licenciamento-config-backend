@@ -23,4 +23,7 @@ public interface SectorRepository {
     void delete(SectorId id);
 
     boolean existsByCode(String code);
+
+  boolean existsByCodeAndActive(String code);
+
 }
