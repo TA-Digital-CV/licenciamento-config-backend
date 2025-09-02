@@ -1,0 +1,28 @@
+{
+  "type": "dto",
+  "module": "configuration",
+  "name": "WrapperListSector",
+  "template": "classic",
+  "enableCustonValidation": false,
+  "extends": {
+    "name": "Page",
+    "module": "shared"
+  },
+  "attributes": [
+    {
+      "name": "content",
+      "objectType": "dto",
+      "type": "SectorResponse",
+      "required": false,
+      "before": false,
+      "after": false,
+      "positive": false,
+      "isEmail": false,
+      "isUrl": false,
+      "primaryKey": false,
+      "collectionType": "list",
+      "module": "configuration"
+    }
+  ],
+  "id": "zjh1kisd8p"
+}

@@ -1,0 +1,22 @@
+{
+  "type": "dto",
+  "module": "configuration",
+  "name": "MoveCategory",
+  "template": "classic",
+  "enableCustonValidation": false,
+  "attributes": [
+    {
+      "name": "newParentId",
+      "objectType": "java",
+      "type": "string",
+      "required": false,
+      "before": false,
+      "after": false,
+      "positive": false,
+      "isEmail": false,
+      "isUrl": false,
+      "primaryKey": false
+    }
+  ],
+  "id": "rl8nej2gfx"
+}
