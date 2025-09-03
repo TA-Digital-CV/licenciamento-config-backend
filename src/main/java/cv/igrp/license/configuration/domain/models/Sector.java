@@ -4,96 +4,110 @@ import cv.igrp.license.configuration.domain.valueobject.SectorId;
 import cv.igrp.license.shared.domain.valueobject.Metadata;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
 public class Sector {
 
-    private final SectorId id;
-    private String name;
-    private String description;
-    private String sectorTypeKey;
-    private String code;
-    private boolean active;
-    private Integer sortOrder;
-    private Metadata metadata;
+  private final SectorId id;
+  private String name;
+  private String description;
+  private String sectorTypeKey;
+  private String code;
+  private boolean active;
+  private Integer sortOrder;
+  private Metadata metadata;
+  private List<Category> categories;
 
-    private Sector(SectorId id,
-                   String name,
-                   String description,
-                   String sectorTypeKey,
-                   String code,
-                   boolean active,
-                   Integer sortOrder,
-                   Metadata metadata) {
+  private Sector(SectorId id,
+                 String name,
+                 String description,
+                 String sectorTypeKey,
+                 String code,
+                 boolean active,
+                 Integer sortOrder,
+                 Metadata metadata,
+                 List<Category> categories) {
 
-        this.id = Objects.requireNonNull(id, "Identificador não pode ser nulo");
-        this.name = Objects.requireNonNull(name, "Nome não pode ser nulo");
-        this.description = description;
-        this.sectorTypeKey = Objects.requireNonNull(sectorTypeKey, "SectorTypeKey não pode ser nulo");
-        this.code = Objects.requireNonNull(code, "Código não pode ser nulo");
-        this.active = active;
-        this.sortOrder = sortOrder;
-        this.metadata = metadata;
-    }
+    this.id = Objects.requireNonNull(id, "Identificador não pode ser nulo");
+    this.name = Objects.requireNonNull(name, "Nome não pode ser nulo");
+    this.description = description;
+    this.sectorTypeKey = Objects.requireNonNull(sectorTypeKey, "SectorTypeKey não pode ser nulo");
+    this.code = Objects.requireNonNull(code, "Código não pode ser nulo");
+    this.active = active;
+    this.sortOrder = sortOrder;
+    this.metadata = metadata;
+    this.categories = categories!=null ? categories : new ArrayList<>();
+  }
 
-    /**
-     * Criar um novo Sector
-     */
-    public static Sector criarNovo(String name,
+  /**
+   * Criar um novo Sector
+   */
+  public static Sector criarNovo(String name,
+                                 String description,
+                                 String sectorTypeKey,
+                                 String code,
+                                 Integer sortOrder,
+                                 Metadata metadata) {
+
+    return new Sector(
+        SectorId.gerarNovo(),
+        name,
+        description,
+        sectorTypeKey,
+        code,
+        true, // ativo por padrão
+        sortOrder,
+        metadata,
+        new ArrayList<>()
+    );
+  }
+
+  /**
+   * Reconstruir um Sector já existente (ex: vindo da base de dados)
+   */
+  public static Sector reconstruir(SectorId id,
+                                   String name,
                                    String description,
                                    String sectorTypeKey,
                                    String code,
+                                   boolean active,
                                    Integer sortOrder,
-                                   Metadata metadata) {
+                                   Metadata metadata,
+                                   List<Category> categories) {
+    return new Sector(id, name, description, sectorTypeKey, code, active, sortOrder, metadata,categories);
+  }
 
-        return new Sector(
-            SectorId.gerarNovo(),
-                name,
-                description,
-                sectorTypeKey,
-                code,
-                true, // ativo por padrão
-                sortOrder,
-                metadata
-        );
-    }
+  /**
+   * Atualizar atributos principais
+   */
+  public void atualizar(String name, String description, String sectorTypeKey, String code, Integer sortOrder,Metadata metadata) {
+    this.name = Objects.requireNonNull(name, "Nome não pode ser nulo");
+    this.description = description;
+    this.sectorTypeKey = Objects.requireNonNull(sectorTypeKey, "SectorTypeKey não pode ser nulo");
+    this.code = Objects.requireNonNull(code, "Código não pode ser nulo");
+    this.sortOrder = sortOrder;
+    this.metadata = metadata;
+  }
 
-    /**
-     * Reconstruir um Sector já existente (ex: vindo da base de dados)
-     */
-    public static Sector reconstruir(SectorId id,
-                                     String name,
-                                     String description,
-                                     String sectorTypeKey,
-                                     String code,
-                                     boolean active,
-                                     Integer sortOrder,
-                                     Metadata metadata) {
-        return new Sector(id, name, description, sectorTypeKey, code, active, sortOrder, metadata);
-    }
+  public void enable() {
+    this.active = true;
 
-    /**
-     * Atualizar atributos principais
-     */
-    public void atualizar(String name, String description, String sectorTypeKey, String code, Integer sortOrder,Metadata metadata) {
-        this.name = Objects.requireNonNull(name, "Nome não pode ser nulo");
-        this.description = description;
-        this.sectorTypeKey = Objects.requireNonNull(sectorTypeKey, "SectorTypeKey não pode ser nulo");
-        this.code = Objects.requireNonNull(code, "Código não pode ser nulo");
-        this.sortOrder = sortOrder;
-        this.metadata = metadata;
+    if(this.getCategories()!=null && !this.getCategories().isEmpty()){
+      this.getCategories().forEach(Category::enable);
     }
+  }
 
-    public void enable() {
-        this.active = true;
+  public void disable () {
+    this.active = false;
+    if(this.getCategories()!=null && !this.getCategories().isEmpty()){
+      this.getCategories().forEach(Category::disable);
     }
+  }
 
-    public void disable () {
-        this.active = false;
-    }
-
-    public boolean isAtivo() {
-        return active;
-    }
+  public boolean isAtivo() {
+    return active;
+  }
 }

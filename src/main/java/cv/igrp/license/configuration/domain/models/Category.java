@@ -29,6 +29,7 @@ public class Category {
   private Category parent;
   private Sector sector;
   private List<Category> children;
+  private List<LicenseType> licenseTypes;
 
   private Category(CategoryId id,
                    String name,
@@ -41,7 +42,8 @@ public class Category {
                    CategoryPath path,
                    Category parent,
                    Sector sector,
-                   List<Category> children) {
+                   List<Category> children,
+                   List<LicenseType> licenseTypes) {
 
     this.id = Objects.requireNonNull(id);
     this.name = Objects.requireNonNull(name);
@@ -55,6 +57,7 @@ public class Category {
     this.parent = parent;
     this.sector = sector;
     this.children = children != null ? children : new ArrayList<>();
+    this.licenseTypes = licenseTypes != null ? licenseTypes : new ArrayList<>();
 
   }
 
@@ -102,6 +105,7 @@ public class Category {
         null,
         parent,
         sector,
+        new ArrayList<>(),
         new ArrayList<>()
     );
   }
@@ -160,7 +164,8 @@ public class Category {
       String path,
       Category parent,
       Sector sector,
-      List<Category> children) {
+      List<Category> children,
+      List<LicenseType> licenseTypes) {
 
     return new Category(
         id,
@@ -175,6 +180,7 @@ public class Category {
         parent,
         sector,
         children != null ? children : new ArrayList<>()
+        , licenseTypes != null ? licenseTypes : new ArrayList<>()
     );
   }
 
@@ -228,10 +234,26 @@ public class Category {
 
   public void enable() {
     this.active = true;
+
+    if (this.getChildren()!=null && !this.getChildren().isEmpty()){
+      this.getChildren().forEach(Category::enable);
+    }
+
+    if(this.getLicenseTypes()!=null && !this.getLicenseTypes().isEmpty()){
+      this.getLicenseTypes().forEach(LicenseType::enable);
+    }
   }
 
   public void disable() {
     this.active = false;
+
+    if (this.getChildren()!=null && !this.getChildren().isEmpty()){
+      this.getChildren().forEach(Category::disable);
+    }
+
+    if(this.getLicenseTypes()!=null && !this.getLicenseTypes().isEmpty()){
+      this.getLicenseTypes().forEach(LicenseType::disable);
+    }
   }
 
   public boolean isAtivo() {
